@@ -175,11 +175,10 @@ const normalized = normalize(rawDocument);
 ```typescript
 import type {
   GenerateOptions,
-  GeneratorInfo,
-  OpenAPIDocument,
-  SecurityScheme,
+  Generator,
   Parameter,
-  RequestBody,
+  Security,
+  Body,
 } from "@powerduck/openapi-codegen";
 ```
 
