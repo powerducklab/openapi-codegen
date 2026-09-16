@@ -1,6 +1,6 @@
 {
   "name": "@powerduck/openapi-codegen",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Generate runnable HTTP request examples from OpenAPI documents. 21 languages, 41 clients, browser-compatible, zero runtime dependencies.",
   "type": "module",
   "main": "./dist/index.cjs",
