@@ -10,8 +10,8 @@ Generate runnable HTTP request examples from OpenAPI documents. Supports 21 lang
 
 Powerduck is an open-source developer tooling platform for teams building modern API workflows.
 
-- **21 Languages** — JavaScript, TypeScript, Python, Go, Rust, Java, PHP, Ruby, C#, Kotlin, Swift, Dart, and more
-- **41 Client Combinations** — fetch, axios, requests, httpx, http.client, Faraday, Guzzle, RestSharp, and more
+- **21 Languages** — JavaScript, Python, Go, Rust, Java, PHP, Ruby, C#, F#, Kotlin, Swift, Dart, and more
+- **41 Client Combinations** — fetch, axios, requests, httpx, http.client, aiohttp, Guzzle, RestSharp, and more
 - **OpenAPI 3.0/3.1/3.2** — Full support for modern OpenAPI specifications
 - **Security Schemes** — Bearer tokens, API keys, Basic auth, OAuth2, and custom headers
 - **Parameter Handling** — Path, query, header, and cookie parameters with proper encoding
@@ -77,7 +77,7 @@ const code = generate({
 
 - [Official Website](https://www.powerduck.com/opensource/openapi-codegen.html)
 - [Documentation](https://www.powerduck.com/docs/openapi-codegen/introduction)
-- [Live Demo](https://www.powerduck.com/demo/openapi-codegen)
+- [Live Demo](https://www.powerduck.com/demo/)
 - [GitHub](https://github.com/powerducklab/openapi-codegen)
 - [npm](https://www.npmjs.com/package/@powerduck/openapi-codegen)
 
@@ -85,28 +85,29 @@ const code = generate({
 
 ## Supported Languages & Clients
 
-| Language   | Clients                                            |
-| ---------- | -------------------------------------------------- |
-| JavaScript | fetch, axios, XMLHttpRequest, jQuery, Node.js http |
-| TypeScript | fetch, axios                                       |
-| Python     | requests, httpx, http.client, aiohttp              |
-| Go         | net/http, resty, fasthttp                          |
-| Rust       | reqwest, hyper                                     |
-| Java       | OkHttp, HttpClient, Unirest, Retrofit              |
-| PHP        | cURL, Guzzle, HTTP_Request2                        |
-| Ruby       | Net::HTTP, Faraday, RestClient                     |
-| C#         | HttpClient, RestSharp, WebRequest                  |
-| Kotlin     | OkHttp, Fuel                                       |
-| Swift      | URLSession, Alamofire                              |
-| Dart       | http, Dio                                          |
-| Shell      | cURL, wget, HTTPie                                 |
-| PowerShell | Invoke-RestMethod, Invoke-WebRequest               |
-| R          | httr, RCurl                                        |
-| MATLAB     | webread, urlwrite                                  |
-| Elixir     | HTTPoison, Tesla                                   |
-| Haskell    | http-conduit, wreq                                 |
-| Clojure    | clj-http, http-kit                                 |
-| Scala      | sttp, akka-http                                    |
+| Language (`language`) | Clients (`client`)                                              |
+| --------------------- | --------------------------------------------------------------- |
+| `c`                   | `libcurl`                                                       |
+| `csharp`              | `httpclient`, `restsharp`                                       |
+| `clojure`             | `clj-http`                                                      |
+| `dart`                | `http`                                                          |
+| `fsharp`              | `httpclient`                                                    |
+| `go`                  | `new-request`                                                   |
+| `http`                | `http1`                                                         |
+| `java`                | `asynchttp`, `java-net-http`, `okhttp`, `unirest`               |
+| `javascript`          | `axios`, `fetch`, `jquery`, `ofetch`, `xhr`                     |
+| `kotlin`              | `okhttp`                                                        |
+| `node`                | `axios`, `fetch`, `ofetch`, `undici`                            |
+| `objc`                | `nsurlsession`                                                  |
+| `ocaml`               | `cohttp`                                                        |
+| `php`                 | `curl`, `guzzle`, `laravel-http`                                |
+| `powershell`          | `invoke-restmethod`, `invoke-webrequest`                        |
+| `python`              | `aiohttp`, `http-client`, `httpx-async`, `httpx-sync`, `requests` |
+| `r`                   | `httr2`                                                         |
+| `ruby`                | `net-http`                                                      |
+| `rust`                | `reqwest`                                                       |
+| `shell`               | `curl`, `httpie`, `wget`                                        |
+| `swift`               | `nsurlsession`                                                  |
 
 ---
 
@@ -126,26 +127,24 @@ const code = generate({
   language: "python",
   client: "requests",
   securityValues: { bearerAuth: "token" },
-  parameterValues: { limit: 10, offset: 0 },
 });
 ```
 
 #### Options
 
-| Option            | Type                      | Required | Description                                                |
-| ----------------- | ------------------------- | -------- | ---------------------------------------------------------- |
-| `document`        | `OpenAPIDocument`         | Yes      | Parsed OpenAPI document object                             |
-| `path`            | `string`                  | Yes      | API path (e.g., `/pets/{id}`)                              |
-| `method`          | `string`                  | Yes      | HTTP method (get, post, put, delete, patch, head, options) |
-| `language`        | `string`                  | Yes      | Target language                                            |
-| `client`          | `string`                  | Yes      | HTTP client library                                        |
-| `securityValues`  | `Record<string, string>`  | No       | Security scheme values                                     |
-| `parameterValues` | `Record<string, unknown>` | No       | Parameter values                                           |
-| `requestBody`     | `unknown`                 | No       | Request body value                                         |
-| `headers`         | `Record<string, string>`  | No       | Additional headers                                         |
-| `timeout`         | `number`                  | No       | Request timeout in ms                                      |
-| `indent`          | `string`                  | No       | Indentation string (default: 2 spaces)                     |
-| `quote`           | `"single" \| "double"`    | No       | Quote style (default: language-specific)                   |
+| Option           | Type                     | Required | Description                                                |
+| ---------------- | ------------------------ | -------- | ---------------------------------------------------------- |
+| `language`       | `string`                 | Yes      | Target language id (see the table above)                   |
+| `client`         | `string`                 | Yes      | HTTP client id (see the table above)                       |
+| `document`       | `unknown`                | Yes*     | Parsed OpenAPI document object                             |
+| `path`           | `string`                 | Yes*     | API path (e.g. `/pets/{id}`)                               |
+| `method`         | `string`                 | Yes*     | HTTP method (get, post, put, delete, patch, head, options) |
+| `request`        | `RequestIR`              | No       | Pre-built intermediate request; skips document normalization |
+| `serverUrl`      | `string`                 | No       | Override the resolved base URL                             |
+| `securityValues` | `Record<string, string>` | No       | Security scheme values                                     |
+| `softRefMode`    | `boolean`                | No       | Lenient `$ref` resolution for partially available documents |
+
+`*` Required when `request` is not provided. The common path is `document` + `path` + `method`; pass a pre-built `request` only when you have already normalized the operation yourself.
 
 ### `list()`
 
@@ -158,14 +157,18 @@ const generators = list();
 // [{ language: "javascript", client: "fetch" }, ...]
 ```
 
-### `normalize(document)`
+### `normalize(options)`
 
-Normalize and validate an OpenAPI document.
+Normalize one operation into the intermediate request shape and validate its inputs.
 
 ```typescript
 import { normalize } from "@powerduck/openapi-codegen";
 
-const normalized = normalize(rawDocument);
+const normalized = normalize({
+  document: rawDocument,
+  path: "/pets/{id}",
+  method: "get",
+});
 ```
 
 ---
