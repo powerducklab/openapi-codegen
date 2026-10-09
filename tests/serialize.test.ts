@@ -370,3 +370,12 @@ describe("parameter serialization", () => {
     });
   });
 });
+
+it("rejects circular deepObject values but preserves repeated shared objects", () => {
+  const loop:any={}; loop.child=loop;
+  expect(()=>parameter({name:"filter",in:"query",style:"deepObject",value:loop})).toThrow(/circular/);
+  const array:any[]=[];array.push(array);
+  expect(()=>parameter({name:"filter",in:"query",style:"deepObject",value:{array}})).toThrow(/circular/);
+  const shared={name:"duck"};
+  expect(parameter({name:"filter",in:"query",style:"deepObject",value:{a:shared,b:shared}})).toHaveLength(2);
+});

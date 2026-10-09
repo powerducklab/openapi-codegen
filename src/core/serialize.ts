@@ -38,12 +38,19 @@ function headerSanitize(value: string): string {
  */
 function flattenPairs(prefix: string, value: unknown, encode: (input: string) => string): Pair[] {
   const result: Pair[] = [];
-  const stack: Array<{ prefix: string; value: unknown }> = [{ prefix, value }];
+  const stack: Array<{ prefix: string; value: unknown; exit?: boolean }> = [{ prefix, value }];
+  const ancestors = new Set<object>();
 
   while (stack.length > 0) {
     const item = stack.pop();
     if (!item) continue;
     const { prefix: p, value: v } = item;
+    if (item.exit) { ancestors.delete(v as object); continue; }
+    if (Array.isArray(v) || isRecord(v)) {
+      if (ancestors.has(v)) throw new TypeError("Cannot serialize a circular deepObject parameter.");
+      ancestors.add(v);
+      stack.push({prefix:p, value:v, exit:true});
+    }
 
     if (Array.isArray(v)) {
       for (let i = v.length - 1; i >= 0; i--) {

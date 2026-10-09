@@ -208,3 +208,7 @@ import type {
 ## License
 
 MIT © [POWERDUCK LIMITED](https://www.powerduck.com)
+
+## 0.6.4 — Circular parameter values
+
+Serializing a circular `deepObject` query parameter now throws a descriptive `TypeError` instead of looping indefinitely. Shared acyclic objects are still serialized at every occurrence.
