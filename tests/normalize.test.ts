@@ -113,7 +113,7 @@ describe("normalize()", () => {
       normalize({
         document: minimalOpenApi,
         path: "/users",
-        method: "INVALID",
+        method: "INVALID METHOD",
       }),
     ).toThrow("Unsupported HTTP method");
   });

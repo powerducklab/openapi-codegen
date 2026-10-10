@@ -212,3 +212,9 @@ MIT © [POWERDUCK LIMITED](https://www.powerduck.com)
 ## 0.6.4 — Circular parameter values
 
 Serializing a circular `deepObject` query parameter now throws a descriptive `TypeError` instead of looping indefinitely. Shared acyclic objects are still serialized at every occurrence.
+
+### Extended HTTP methods
+
+HTTP operation discovery includes all nine fixed OpenAPI 3.2 methods (including `trace` and `query`) and custom verbs in `additionalOperations`, such as `PROPFIND`, `REPORT`, and `CUSTOM-VERB`. Shared method helpers come from `@powerduck/openapi-parser/methods`; path metadata is not interpreted as an operation. Custom verbs must be valid HTTP tokens. Use OpenAPI 3.2 when declaring QUERY or `additionalOperations`.
+
+Generated requests preserve custom method names. The target HTTP client/server must support the method; browser Fetch restrictions still apply to methods such as CONNECT and TRACE.

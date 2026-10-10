@@ -1,17 +1,9 @@
+import { isHttpMethod, getOperation } from "@powerduck/openapi-parser/methods";
 import { example, type ExampleGenContext } from "./example";
 import { RefResolver } from "./refs";
 import { firstDefined, isRecord, lightweightOpenAPIPreCheck, nonBlankString } from "./helpers";
 
-const HTTP_METHODS = new Set([
-  "get",
-  "put",
-  "post",
-  "delete",
-  "options",
-  "head",
-  "patch",
-  "trace",
-]);
+
 
 const CONTENT_PREFERENCES: RegExp[] = [
   /^application\/(?:[a-z0-9.+-]+\+)?json(?:\s*;.*)?$/i,
@@ -59,7 +51,7 @@ function own(object: Record<string, unknown>, key: string): boolean {
 function normalizeMethod(value: unknown): string {
   const method = nonBlankString(value)?.toLowerCase();
 
-  if (!method || !HTTP_METHODS.has(method)) {
+  if (!method || !isHttpMethod(method)) {
     throw new Error(`Unsupported HTTP method: ${String(value)}`);
   }
 
@@ -315,7 +307,7 @@ export function normalize(options: NormalizeOptions) {
     throw new Error(`Invalid Path Item Object: ${path}`);
   }
 
-  const operation = resolver.deref(pathItem[method]);
+  const operation = resolver.deref(getOperation(pathItem, method));
   if (!isRecord(operation)) {
     throw new Error(`Operation not found: ${method.toUpperCase()} ${path}`);
   }
