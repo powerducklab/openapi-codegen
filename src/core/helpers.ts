@@ -237,10 +237,7 @@ export function escapePhp(value: string): string {
 export function escapeRuby(value: string): string {
   const text = String(value);
 
-  if (text.includes("\n")) {
-    return `%Q{${text.replace(/\\/g, "\\\\").replace(/}/g, "\\}").replace(/\$/g, "\\$")}}`;
-  }
-
+  // Ruby single-quoted strings support literal newlines without interpolation.
   return `'${text.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
 }
 

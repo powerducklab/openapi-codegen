@@ -629,9 +629,9 @@ describe("coverage supplement tests", () => {
       expect(escapePhp("path\\to'file")).toBe("'path\\\\to\\'file'");
     });
 
-    it("escapeRuby uses %Q{} for multiline", () => {
+    it("escapeRuby uses non-interpolated literals for multiline", () => {
       const result = escapeRuby("line1\nline2");
-      expect(result).toContain("%Q{");
+      expect(result).toBe("'line1\nline2'");
     });
 
     it("escapeRuby uses single quotes for single line", () => {

@@ -255,9 +255,9 @@ describe("escape functions", () => {
       expect(escapeRuby("hello")).toBe("'hello'");
     });
 
-    it("uses %Q{} for multi-line strings", () => {
+    it("uses non-interpolated literals for multi-line strings", () => {
       const result = escapeRuby("line1\nline2");
-      expect(result).toContain("%Q{");
+      expect(result).toBe("'line1\nline2'");
       expect(result).toContain("line1");
       expect(result).toContain("line2");
     });
@@ -624,4 +624,12 @@ describe("fileComment", () => {
     expect(comment).toContain("test.bin");
     expect(comment).toContain("//");
   });
+});
+
+
+it("keeps Ruby interpolation and delimiters inside a literal", () => {
+  const input = "line1\n#{raise 'injected'}\n}\n\\end";
+  expect(escapeRuby(input)).toBe(
+    "'line1\n#{raise \\'injected\\'}\n}\n\\\\end'",
+  );
 });
